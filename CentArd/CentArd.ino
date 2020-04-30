@@ -15,8 +15,8 @@
 // Global variables/flags
 bool init_complete = false;
 bool print_in_progress = false;
-bool data_ready = false;
-byte data = 0;
+volatile bool data_ready = false;
+volatile byte data = 0;
 byte buff[512];
 int buff_index = 0;
 long last_update;
