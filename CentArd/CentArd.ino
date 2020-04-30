@@ -13,16 +13,16 @@ int buff_index = 0;
 long last_update;
 long file_size = 0;
 
-#define CentD0  2
-#define CentD1  3
-#define CentD2  4
-#define CentD3  5
-#define CentD4  6
-#define CentD5  7
-#define CentD6  8
-#define CentD7  9
+#define CentD0  3
+#define CentD1  4
+#define CentD2  5
+#define CentD3  6
+#define CentD4  7
+#define CentD5  8
+#define CentD6  9
+#define CentD7  10
 
-#define CentSTROBE  A0
+#define CentSTROBE  2
 #define CentERROR   A1
 #define CentSELECT  A2
 #define CentPAPER   A3
@@ -98,7 +98,7 @@ void loop()
     {
       // Just started printing. Create new file
       CreateNewFile();
-      Serial.print("Receiving from printer.");
+      Serial.print("Receiving from printer...");
       file_size = 0;
     }
     print_in_progress = true;
@@ -108,7 +108,6 @@ void loop()
   if(buff_index >= 512)
   {
     // Flush buffer to file
-    Serial.print(".");
     WriteToFile(buff, sizeof(buff));
     file_size += buff_index - 1;
     buff_index = 0;
@@ -124,9 +123,9 @@ void loop()
       file_size += buff_index - 1;
       buff_index = 0;
     }
-    Serial.println(".Done");
-    Serial.print("Closing file..");
-    Serial.println("..Ok");
+    Serial.println("\nDone.");
+    Serial.println("Closing file...");
+    Serial.println("Ok.");
     CloseFile();
     print_in_progress = false;
   } 
@@ -137,7 +136,7 @@ void CreateNewFile()
 {
   // Found new file
   Serial.println();
-  Serial.print("New file created.");
+  Serial.println("New file created.");
 }
 
 
@@ -147,6 +146,11 @@ void CloseFile() {
 
 void WriteToFile(byte* b, int b_size)
 {
+  for (int a = 0; a < b_size; a++) {
+    if (b[a] == '\r') {
+      b[a] = '\n';
+    }
+  }
   Serial.write(b, b_size);
 }
 
