@@ -13,6 +13,21 @@ int buff_index = 0;
 long last_update;
 long file_size = 0;
 
+#define CentD0  2
+#define CentD1  3
+#define CentD2  4
+#define CentD3  5
+#define CentD4  6
+#define CentD5  7
+#define CentD6  8
+#define CentD7  9
+
+#define CentSTROBE  A0
+#define CentERROR   A1
+#define CentSELECT  A2
+#define CentPAPER   A3
+#define CentBUSY    A4
+#define CentACK     A5
 
 void setup() 
 {
@@ -23,32 +38,32 @@ void setup()
   Serial.println();
   
   // Configure pins
-  pinMode(18, INPUT_PULLUP); // Strobe - normally high
-  attachInterrupt(digitalPinToInterrupt(18), StrobeFallingEdge, FALLING); // Attach to pin interrupt
+  pinMode(CentSTROBE, INPUT_PULLUP); // Strobe - normally high
+  attachInterrupt(digitalPinToInterrupt(CentSTROBE), StrobeFallingEdge, FALLING); // Attach to pin interrupt
   
-  pinMode(22, OUTPUT);  // Error - normally high
-  digitalWrite(22, true);
+  pinMode(CentERROR, OUTPUT);  // Error - normally high
+  digitalWrite(CentERROR, true);
 
-  pinMode(24, OUTPUT);  // Select - normally high
-  digitalWrite(24, true);
+  pinMode(CentSELECT, OUTPUT);  // Select - normally high
+  digitalWrite(CentSELECT, true);
 
-  pinMode(26, OUTPUT);  // Paper out - normally low
-  digitalWrite(26, false);
+  pinMode(CentPAPER, OUTPUT);  // Paper out - normally low
+  digitalWrite(CentPAPER, false);
 
-  pinMode(28, OUTPUT);  // Busy - normally low
-  digitalWrite(28, false);
+  pinMode(CentBUSY, OUTPUT);  // Busy - normally low
+  digitalWrite(CentBUSY, false);
   
-  pinMode(30, OUTPUT);  // Ack - normally high
-  digitalWrite(30, true);
+  pinMode(CentACK, OUTPUT);  // Ack - normally high
+  digitalWrite(CentACK, true);
 
-  pinMode(39, INPUT_PULLUP);  // D0
-  pinMode(41, INPUT_PULLUP);  // D1
-  pinMode(43, INPUT_PULLUP);  // D2
-  pinMode(45, INPUT_PULLUP);  // D3
-  pinMode(47, INPUT_PULLUP);  // D4
-  pinMode(49, INPUT_PULLUP);  // D5
-  pinMode(46, INPUT_PULLUP);  // D6
-  pinMode(48, INPUT_PULLUP);  // D7
+  pinMode(CentD0, INPUT_PULLUP);  // D0
+  pinMode(CentD1, INPUT_PULLUP);  // D1
+  pinMode(CentD2, INPUT_PULLUP);  // D2
+  pinMode(CentD3, INPUT_PULLUP);  // D3
+  pinMode(CentD4, INPUT_PULLUP);  // D4
+  pinMode(CentD5, INPUT_PULLUP);  // D5
+  pinMode(CentD6, INPUT_PULLUP);  // D6
+  pinMode(CentD7, INPUT_PULLUP);  // D7
     
   // Update timeout
   last_update = millis();
@@ -69,11 +84,11 @@ void loop()
     data_ready = false;
     
     // Ack byte, reset busy
-    digitalWrite(30, false);  // ACK
+    digitalWrite(CentACK, false);  // ACK
     delayMicroseconds(7);
-    digitalWrite(28, false);  // BUSY
+    digitalWrite(CentBUSY, false);  // BUSY
     delayMicroseconds(5);
-    digitalWrite(30, true);   // ACK
+    digitalWrite(CentACK, true);   // ACK
 
     // Reset timeout
     last_update = millis();
@@ -146,19 +161,18 @@ void StrobeFallingEdge()
     }
     
   // Set busy signal
-  digitalWrite(28, true);
+  digitalWrite(CentBUSY, true);
   
   // Read data from port
-  data = (digitalRead(39) << 0) | 
-         (digitalRead(41) << 1) | 
-         (digitalRead(43) << 2) | 
-         (digitalRead(45) << 3) |
-         (digitalRead(47) << 4) |
-         (digitalRead(49) << 5) |
-         (digitalRead(46) << 6) |
-         (digitalRead(48) << 7);
+  data = (digitalRead(CentD0) << 0) | 
+         (digitalRead(CentD1) << 1) | 
+         (digitalRead(CentD2) << 2) | 
+         (digitalRead(CentD3) << 3) |
+         (digitalRead(CentD4) << 4) |
+         (digitalRead(CentD5) << 5) |
+         (digitalRead(CentD6) << 6) |
+         (digitalRead(CentD7) << 7);
   
   // Set ready bit
   data_ready = true;    
 }
-
