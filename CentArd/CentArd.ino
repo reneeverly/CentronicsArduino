@@ -1,13 +1,4 @@
 // Arduino Centronics printer capture tool 
-// Using Ethernet shield with built-in SD card
-// SD card pinout:
-// MOSI: pin 11
-// MISO: pin 12
-// CLK:  pin 13
-// CS:   pin 4
-
-#include <SPI.h>
-#include <SD.h>
 
 // 10s timeout before considering the print completed
 #define TIMEOUT_MS 10000
@@ -20,7 +11,6 @@ volatile byte data = 0;
 byte buff[512];
 int buff_index = 0;
 long last_update;
-File current_file;
 long file_size = 0;
 
 
@@ -31,19 +21,6 @@ void setup()
   Serial.println();
   Serial.println();
   Serial.println();
-  
-  // Initialize SD card
-  Serial.println("Init SD");
-  pinMode(53, OUTPUT);  // HW CS pin, init it just in case
-  pinMode(4, OUTPUT);
-  if ( !SD.begin(4) ) 
-  {
-    Serial.println("SD Init Failed");
-  }
-  else
-  {
-    Serial.println("SD Init Ok");
-  }
   
   // Configure pins
   pinMode(18, INPUT_PULLUP); // Strobe - normally high
@@ -134,44 +111,28 @@ void loop()
     }
     Serial.println(".Done");
     Serial.print("Closing file..");
-    current_file.close();
     Serial.println("..Ok");
+    CloseFile();
     print_in_progress = false;
   } 
 }
 
 
 void CreateNewFile()
-{  
-  // Find unique file 
-  char fname[30];  
-  int i = 1;  
-  do
-  {
-    sprintf (fname, "sa%03d.prn", i);
-    i++;
-  } while(SD.exists(fname));
-
+{
   // Found new file
   Serial.println();
-  current_file = SD.open(fname, FILE_WRITE);
-  Serial.print("New file created: ");
-  Serial.println(fname);
+  Serial.print("New file created.");
+}
+
+
+void CloseFile() {
 }
 
 
 void WriteToFile(byte* b, int b_size)
 {
-  // Verify that the file is open
-  if (current_file) 
-  {
-    current_file.write(b, b_size);
-  }
-  else 
-  {
-    Serial.println();
-    Serial.println("Can't write to file");
-  }
+  Serial.write(b, b_size);
 }
 
 
