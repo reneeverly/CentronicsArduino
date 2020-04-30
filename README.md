@@ -4,29 +4,8 @@
 * [ ] Move Everything to Serial
   * [x] Remove LCD Screen
   * [x] Remove SD Card
+* [ ] Remap Mega Pins to Uno Pins
 * [ ] Rework Serial Interface
- 
-## SD card pinout
-
-| SD card pin name | Arduino pin |
-|------------------|-------------|
-| MOSI             | pin 11      |
-| MISO             | pin 12      |
-| CLK              | pin 13      |
-| CS               | pin 4       |
-| GND              | GND         |
-
-
-## LCD pinout
-
-| LCD pin name | Arduino pin number |
-|--------------|--------------------|
-| RS           | pin 8              |
-| EN           | pin 9              |
-| D4           | pin 4              |
-| D5           | pin 5              |
-| D6           | pin 6              |
-| D7           | pin 7              |
 
 
 ## Parallel interface
