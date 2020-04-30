@@ -36,7 +36,7 @@ Centronics parallel interface is pretty old and it was well documented in nineti
 | Strobe    | 1                              | pin 18      | Input                 | Pullup enabled. Attached to falling edge interrupt.                       |
 | Error     | 15                             | pin 22      | Output                | Not used. Forced high.                                                    |
 | Select    | 13                             | pin 24      | Output                | Not used. Forced high.                                                    |
-| Paper Out | 12                             | pin 26      | Output                | Not used. Forced high.                                                    |
+| Paper Out | 12                             | pin 26      | Output                | Not used. Forced low.                                                    |
 | Busy      | 11                             | pin 28      | Output                | Set high on the falling edge of Strobe. Set low after acknowledging data. |
 | Ack       | 10                             | pin 30      | Output                | Generate falling edge to acknowledge data.                                |
 | D0        | 2                              | pin 39      | Input                 | Parallel data.                                                            |
