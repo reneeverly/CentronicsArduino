@@ -2,8 +2,9 @@
 
 ## TODO: Adapting away from Arduino Mega
 * [ ] Move Everything to Serial
-  * [ ] Remove LCD Screen
-  * [ ] Remove SD Card
+  * [x] Remove LCD Screen
+  * [x] Remove SD Card
+* [ ] Rework Serial Interface
  
 ## SD card pinout
 
