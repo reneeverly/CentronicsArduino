@@ -6,10 +6,6 @@
 // CLK:  pin 13
 // CS:   pin 4
 
-// LCD pinout:
-// EN: pin A7
-
-#include <LiquidCrystal.h>
 #include <SPI.h>
 #include <SD.h>
 
@@ -17,7 +13,6 @@
 #define TIMEOUT_MS 10000
 
 // Global variables/flags
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);  // RS, EN, D4, D5, D6, D7
 bool init_complete = false;
 bool print_in_progress = false;
 bool data_ready = false;
@@ -37,10 +32,6 @@ void setup()
   Serial.println();
   Serial.println();
   
-  lcd.begin(16, 2);  
-  delay(10);
-  lcd.clear();  
-  
   // Initialize SD card
   Serial.println("Init SD");
   pinMode(53, OUTPUT);  // HW CS pin, init it just in case
@@ -48,12 +39,10 @@ void setup()
   if ( !SD.begin(4) ) 
   {
     Serial.println("SD Init Failed");
-    lcd.print("! No SD card !");
   }
   else
   {
     Serial.println("SD Init Ok");
-    lcd.print("--== Ready ==--");
   }
   
   // Configure pins
@@ -119,11 +108,6 @@ void loop()
       CreateNewFile();
       Serial.print("Receiving from printer.");
       file_size = 0;
-
-      // Update LCD
-      lcd.clear();
-      lcd.print("Prn to:");
-      lcd.print(current_file.name());      
     }
     print_in_progress = true;
   }
@@ -135,13 +119,7 @@ void loop()
     Serial.print(".");
     WriteToFile(buff, sizeof(buff));
     file_size += buff_index - 1;
-    buff_index = 0;    
-
-    // Update LCD
-    lcd.setCursor(0, 1);
-    lcd.print("Size:");
-    lcd.print(file_size);
-    lcd.print("B");
+    buff_index = 0;
   }
 
   // Timeout
@@ -159,11 +137,6 @@ void loop()
     current_file.close();
     Serial.println("..Ok");
     print_in_progress = false;
-
-    // Update LCD
-    lcd.clear();
-    lcd.print("Done: ");
-    lcd.print(current_file.name());
   } 
 }
 
